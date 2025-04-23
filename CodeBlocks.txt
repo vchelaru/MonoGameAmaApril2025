@@ -1,0 +1,396 @@
+﻿/////////////////////////////////////////////////////////////////////
+////////////////Simplest setup///////////////////////////////////////
+ 
+ 
+
+
+var panel = new StackPanel();
+panel.AddToRoot();
+
+var button = new Button();
+panel.AddChild(button);
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+///////////fully functional UI - buttons have clicks/////////////////
+
+
+
+
+
+
+var panel = new StackPanel();
+panel.Spacing = 4;
+panel.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+for(int i = 0; i < 10; i++)
+{
+    var button = new Button();
+    button.Text = "Button " + i;
+    button.Width = 290;
+    button.Click += (sender, args) => 
+        button.Text = $"Clicked at {DateTime.Now}";
+    panel.AddChild(button);
+}
+
+
+////////////////////////////////////////////////////////////////////
+///////////gamepad and keyboard work!///////////////////////////////
+
+
+
+
+
+
+
+FrameworkElement.KeyboardsForUiControl.Add(
+    Gum.Keyboard);
+
+FrameworkElement.GamePadsForUiControl.AddRange(
+    Gum.Gamepads);
+
+var panel = new StackPanel();
+panel.Spacing = 4;
+panel.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+for(int i = 0; i < 10; i++)
+{
+    var button = new Button();
+
+    if(i == 0)
+    {
+        button.IsFocused = true;
+    }
+
+    button.Text = "Button " + i;
+    button.Width = 290;
+    button.Click += (sender, args) => 
+        button.Text = $"Clicked at {DateTime.Now}";
+    panel.AddChild(button);
+}
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+////////////More controls///////////////////////////////////////////////////
+
+
+
+
+
+
+FrameworkElement.KeyboardsForUiControl.Add(
+    Gum.Keyboard);
+
+FrameworkElement.GamePadsForUiControl.AddRange(
+    Gum.Gamepads);
+
+var gapSize = 6;
+
+var panel = new StackPanel();
+panel.Spacing = 4;
+panel.Visual.WidthUnits = DimensionUnitType.Absolute;
+panel.Width = 300;
+panel.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+
+var nameLabel = new Label();
+nameLabel.Text = "Name:";
+panel.AddChild(nameLabel);
+var textBox = new TextBox();
+textBox.Dock(Dock.FillHorizontally);
+textBox.Placeholder = "eg. Cloud";
+panel.AddChild(textBox);
+
+var difficultyLabel = new Label();
+difficultyLabel.Y = gapSize;
+difficultyLabel.Text = "Difficulty:";
+panel.AddChild(difficultyLabel);
+var difficultyComboBox = new ComboBox();
+difficultyComboBox.Dock(Dock.FillHorizontally);
+difficultyComboBox.Items.Add("Easy");
+difficultyComboBox.Items.Add("Medium");
+difficultyComboBox.Items.Add("Hard");
+difficultyComboBox.SelectedIndex = 0;
+panel.AddChild(difficultyComboBox);
+
+var fullScreenCheckBox = new CheckBox();
+fullScreenCheckBox.Y = gapSize;
+fullScreenCheckBox.Text = "Full Screen";
+fullScreenCheckBox.Dock(Dock.FillHorizontally);
+panel.AddChild(fullScreenCheckBox);
+
+var sfxLabel = new Label();
+sfxLabel.Y = gapSize;
+sfxLabel.Text = "SFX Volume:";
+panel.AddChild(sfxLabel);
+var sfxSlider = new Slider();
+sfxSlider.Dock(Dock.FillHorizontally);
+panel.AddChild(sfxSlider);
+
+var musicLabel = new Label();
+musicLabel.Y = gapSize;
+musicLabel.Text = "Music Volume:";
+panel.AddChild(musicLabel);
+var musicSlider = new Slider();
+musicSlider.Dock(Dock.FillHorizontally);
+panel.AddChild(musicSlider); 
+
+var button = new Button();
+button.Dock(Dock.FillHorizontally);
+button.Text = "Start Game";
+panel.AddChild(button);
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////
+////////////////////// Unstyled button/////////////////////////
+
+
+
+
+
+
+var panel = new StackPanel();
+panel.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+var button = new Button();
+button.Text = "Start Game";
+panel.AddChild(button); 
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// button with some styling, but it gets overwritten
+
+
+
+
+
+
+
+
+
+var panel = new StackPanel();
+panel.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+var button = new Button();
+button.Text = "Start Game";
+button.Height = 100;
+button.Width = 200;
+panel.AddChild(button);
+
+var buttonText = button.GetVisual<TextRuntime>();
+buttonText.UseCustomFont = true;
+buttonText.CustomFontFile  = "Font18Ravie_Bold.fnt";
+buttonText.FontScale = 2;
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// state based styling
+
+
+
+
+
+
+
+var panel = new StackPanel();
+panel.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+var button = new Button();
+button.Text = "Start Game";
+button.Height = 100;
+panel.AddChild(button);
+
+var buttonBackground = button.GetVisual<ColoredRectangleRuntime>();
+
+var enabledState = button.GetState(FrameworkElement.EnabledStateName);
+enabledState.Clear();
+enabledState.Apply = () =>
+{
+    buttonBackground.Color = Color.Red;
+};
+
+var highlightedState = button.GetState(FrameworkElement.HighlightedStateName);
+highlightedState.Clear();
+highlightedState.Apply = () =>
+{
+    buttonBackground.Color = Color.Pink;
+};
+
+var pushedState = button.GetState(FrameworkElement.PushedStateName);
+pushedState.Clear();
+pushedState.Apply = () =>
+{
+    buttonBackground.Color = Color.DarkRed;
+};
+
+button.UpdateState();
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+/// Create a new class, fully make a button from scratch!
+
+
+
+
+
+
+var panel = new StackPanel();
+panel.Visual.Anchor(Anchor.Center);
+panel.AddToRoot();
+
+var button = new CustomButton();
+button.Height = 100;
+button.Width = 200;
+panel.AddChild(button);
+///...
+class CustomButton : Button
+{
+    public CustomButton()
+    {
+        var container = new ContainerRuntime();
+
+        var background = new NineSliceRuntime();
+        background.Dock(Gum.Wireframe.Dock.Fill);
+        background.SourceFileName = "button_square_depth_gloss.png";
+        container.AddChild(background);
+
+        var category = new StateSaveCategory();
+        category.Name = ButtonCategoryName; 
+        container.AddCategory(category);
+
+        var enabledState = new StateSave();
+        enabledState.Name = FrameworkElement.EnabledStateName;
+        enabledState.Apply = () =>
+        {
+            background.SourceFileName = "button_square_depth_gloss.png";
+        };
+        category.States.Add(enabledState);
+
+        var highlightedState = enabledState.Clone();
+        highlightedState.Name = FrameworkElement.HighlightedStateName;
+        category.States.Add(highlightedState);
+
+        var pushedState = new StateSave();
+        pushedState.Name = FrameworkElement.PushedStateName;
+        pushedState.Apply = () =>
+        {
+            background.SourceFileName = "button_square_gloss.png";
+        };
+        category.States.Add(pushedState);
+
+
+        this.Visual = container;
+    }
+}
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////tie it back to what we had before///////////////////////////////////
+
+
+
+
+
+
+
+
+var panel = new StackPanel();
+panel.Anchor(Anchor.Center);
+panel.Spacing = 10;
+panel.AddToRoot();
+
+for (int i = 0; i < 10; i++)
+{
+    var button = new CustomButton();
+    button.Text = "Button " + i;
+    button.Width = 290;
+    button.Click += (_, _) =>
+        button.Text = $"Clicked at {DateTime.Now}";
+    panel.AddChild(button);
+}
+
+class CustomButton : Button
+{
+    public CustomButton()
+    {
+        var container = new ContainerRuntime();
+        container.Height = 32;
+
+        var background = new NineSliceRuntime();
+        background.Dock(Gum.Wireframe.Dock.Fill);
+        background.SourceFileName = "button_square_depth_gloss.png";
+        container.AddChild(background);
+
+        var text = new TextRuntime();
+        text.Name = "TextInstance";
+        text.Dock(Gum.Wireframe.Dock.Fill);
+        container.AddChild(text);
+
+        var category = new StateSaveCategory();
+        category.Name = ButtonCategoryName;
+        container.AddCategory(category);
+
+        var enabledState = new StateSave();
+        enabledState.Name = FrameworkElement.EnabledStateName;
+        enabledState.Apply = () =>
+        {
+            background.SourceFileName = "button_square_depth_gloss.png";
+            text.Y = 0;
+        };
+        category.States.Add(enabledState);
+
+        var highlightedState = enabledState.Clone();
+        highlightedState.Name = FrameworkElement.HighlightedStateName;
+        category.States.Add(highlightedState);
+
+        var pushedState = new StateSave();
+        pushedState.Name = FrameworkElement.PushedStateName;
+        pushedState.Apply = () =>
+        {
+            background.SourceFileName = "button_square_gloss.png";
+            text.Y = 4;
+        };
+        category.States.Add(pushedState);
+
+        this.Visual = container;
+    }
+}
